@@ -27,7 +27,7 @@ export const Navbar: React.FC = () => {
     const targetUser = users.find(u => u.id === targetId);
     if (targetUser) {
       try {
-        await login(targetUser.email, 'password', targetUser.role);
+        await login(targetUser.email, 'password123', targetUser.role);
         navigate(targetUser.role === 'entrepreneur' ? '/dashboard/entrepreneur' : '/dashboard/investor');
       } catch (err) {
         console.error(err);

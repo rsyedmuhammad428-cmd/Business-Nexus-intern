@@ -82,6 +82,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(USER_STORAGE_KEY);
+    // Clear meetings data when logging out
+    localStorage.removeItem('nexus_meetings_state_v3');
     toast.success('Logged out successfully');
   };
 

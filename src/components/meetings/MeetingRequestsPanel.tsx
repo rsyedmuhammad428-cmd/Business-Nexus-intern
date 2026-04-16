@@ -4,11 +4,12 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Card, CardBody, CardHeader } from '../ui/Card';
 import { Avatar } from '../ui/Avatar';
-import type { Meeting } from '../../types';
+import type { Meeting, User } from '../../types';
 import { findUserById, getUserLabel } from '../../utils/userDirectory';
 
 interface MeetingRequestsPanelProps {
   userId: string;
+  currentUser?: User | null;
   pendingIncoming: Meeting[];
   pendingOutgoing: Meeting[];
   onAccept: (meetingId: string) => void;
@@ -30,6 +31,7 @@ const statusBadgeVariant = (status: Meeting['status']) => {
 
 export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
   userId,
+  currentUser,
   pendingIncoming,
   pendingOutgoing,
   onAccept,
@@ -47,7 +49,9 @@ export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
             <p className="text-sm text-gray-600">No incoming requests.</p>
           ) : (
             pendingIncoming.map((m) => {
-              const sender = findUserById(m.senderId);
+              const sender = findUserById(m.senderId, currentUser);
+              const senderName = sender?.name ?? 'Unknown user';
+              const senderAvatar = (sender as any)?.avatarUrl ?? '';
               return (
                 <div
                   key={m.id}
@@ -55,14 +59,14 @@ export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
                 >
                   <div className="flex gap-3">
                     <Avatar
-                      src={sender?.avatarUrl ?? ''}
-                      alt={sender?.name ?? 'Sender'}
+                      src={senderAvatar}
+                      alt={senderName}
                       size="md"
                     />
                     <div>
                       <p className="font-medium text-gray-900">{m.title}</p>
                       <p className="text-sm text-gray-600">
-                        From {getUserLabel(m.senderId)}
+                        From {senderName}
                       </p>
                       <p className="mt-1 text-xs text-gray-500">{formatRange(m.start, m.end)}</p>
                       {m.message && (
@@ -95,7 +99,9 @@ export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
             <p className="text-sm text-gray-600">You have no pending sent requests.</p>
           ) : (
             pendingOutgoing.map((m) => {
-              const receiver = findUserById(m.receiverId);
+              const receiver = findUserById(m.receiverId, currentUser);
+              const receiverName = receiver?.name ?? 'Unknown user';
+              const receiverAvatar = (receiver as any)?.avatarUrl ?? '';
               return (
                 <div
                   key={m.id}
@@ -103,8 +109,8 @@ export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
                 >
                   <div className="flex gap-3 items-center">
                     <Avatar
-                      src={receiver?.avatarUrl ?? ''}
-                      alt={receiver?.name ?? 'Receiver'}
+                      src={receiverAvatar}
+                      alt={receiverName}
                       size="sm"
                     />
                     <div className="flex-1 min-w-0">
@@ -113,7 +119,7 @@ export const MeetingRequestsPanel: React.FC<MeetingRequestsPanelProps> = ({
                         <Badge variant={statusBadgeVariant(m.status)}>{m.status}</Badge>
                       </div>
                       <p className="text-sm text-gray-600 truncate">
-                        To {getUserLabel(m.receiverId)} · {formatRange(m.start, m.end)}
+                        To {receiverName} · {formatRange(m.start, m.end)}
                       </p>
                     </div>
                   </div>

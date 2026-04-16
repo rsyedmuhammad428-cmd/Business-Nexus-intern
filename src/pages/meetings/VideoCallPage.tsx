@@ -38,8 +38,8 @@ export const VideoCallPage: React.FC = () => {
   }
 
   const otherPartyId = meeting.senderId === user.id ? meeting.receiverId : meeting.senderId;
-  const otherParty = findUserById(otherPartyId);
-  const otherPartyName = otherParty?.name ?? getUserLabel(otherPartyId);
+  const otherParty = findUserById(otherPartyId, user);
+  const otherPartyName = otherParty?.name ?? 'User ' + otherPartyId.substring(0, 8);
 
   const handleEndCall = () => {
     if (meeting.status === 'accepted') {

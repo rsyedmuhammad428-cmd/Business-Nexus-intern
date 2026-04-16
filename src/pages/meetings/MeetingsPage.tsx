@@ -191,6 +191,7 @@ export const MeetingsPage: React.FC = () => {
         <div className="space-y-6">
           <MeetingRequestsPanel
             userId={user.id}
+            currentUser={user}
             pendingIncoming={pendingIncoming}
             pendingOutgoing={pendingOutgoing}
             onAccept={(id) => acceptMeeting(id, user.id)}

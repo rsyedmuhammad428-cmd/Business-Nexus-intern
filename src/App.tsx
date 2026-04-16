@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { MeetingsProvider } from './context/MeetingsContext';
 import { DocumentsProvider } from './context/DocumentsContext';
 import { PaymentsProvider } from './context/PaymentsContext';
@@ -40,12 +40,14 @@ import { ChatPage } from './pages/chat/ChatPage';
 // Payment Pages
 import { PaymentsPage } from './pages/payments/PaymentsPage';
 
-function App() {
+// Wrapper component to access currentUser from AuthContext
+function AppRoutes() {
+  const { user } = useAuth();
+
   return (
-    <AuthProvider>
-      <MeetingsProvider>
-        <DocumentsProvider>
-          <PaymentsProvider>
+    <MeetingsProvider currentUser={user}>
+      <DocumentsProvider>
+        <PaymentsProvider>
             <Router>
               <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
               <Routes>
@@ -123,9 +125,19 @@ function App() {
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
             </Router>
-          </PaymentsProvider>
-        </DocumentsProvider>
-      </MeetingsProvider>
+        </PaymentsProvider>
+      </DocumentsProvider>
+    </MeetingsProvider>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
+        <AppRoutes />
+      </Router>
     </AuthProvider>
   );
 }

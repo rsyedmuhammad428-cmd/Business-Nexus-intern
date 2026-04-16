@@ -105,10 +105,11 @@ function involvesUser(m: Meeting, userId: string): boolean {
   return m.senderId === userId || m.receiverId === userId;
 }
 
-export const MeetingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const MeetingsProvider: React.FC<{ children: React.ReactNode; currentUser?: any }> = ({ children, currentUser }) => {
   const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [lastUserId, setLastUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const s = loadState();
@@ -129,6 +130,19 @@ export const MeetingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
+
+  // Clear meetings when user changes (account switch)
+  useEffect(() => {
+    if (currentUser?.id && lastUserId && lastUserId !== currentUser.id) {
+      // User has switched, clear demo data
+      setAvailabilitySlots([]);
+      setMeetings([]);
+      localStorage.removeItem(STORAGE_KEY_V2);
+    }
+    if (currentUser?.id) {
+      setLastUserId(currentUser.id);
+    }
+  }, [currentUser?.id, lastUserId]);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -196,15 +210,29 @@ export const MeetingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       senderRole: UserRole,
       payload: { title: string; start: string; end: string; message?: string }
     ) => {
-      const sender = findUserById(senderId);
-      const receiver = findUserById(receiverId);
-
-      if (!sender || !receiver) {
-        toast.error('Invalid users specified');
+      // Check that sender and receiver are different
+      if (senderId === receiverId) {
+        toast.error('You cannot send a meeting request to yourself');
         return;
       }
+
+      // Validate time range
       if (new Date(payload.end) <= new Date(payload.start)) {
         toast.error('End time must be after start time');
+        return;
+      }
+
+      // Get sender info (should be the current user)
+      const sender = findUserById(senderId, currentUser);
+      if (!sender) {
+        toast.error('Invalid sender');
+        return;
+      }
+
+      // Receiver can be either a demo user or another API user
+      // We're lenient here since we're in hybrid demo/API mode
+      if (!receiverId || receiverId.trim().length === 0) {
+        toast.error('Invalid receiver');
         return;
       }
 
@@ -224,7 +252,7 @@ export const MeetingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setMeetings((prev) => [...prev, meeting]);
       toast.success('Meeting request sent');
     },
-    []
+    [currentUser]
   );
 
   const acceptMeeting = useCallback((meetingId: string, userId: string) => {
