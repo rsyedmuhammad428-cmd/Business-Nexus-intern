@@ -1,7 +1,9 @@
 import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI;
-const options = {};
+const options = {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+};
 
 let client;
 let clientPromise: Promise<MongoClient>;

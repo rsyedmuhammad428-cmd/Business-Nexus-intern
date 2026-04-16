@@ -50,7 +50,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.success('Successfully logged in!');
     } catch (error: any) {
       const message = error.response?.data?.message || 'Login failed';
-      toast.error(message);
+      const detail = error.response?.data?.error ? ` (${error.response.data.error})` : '';
+      toast.error(`${message}${detail}`);
       throw error;
     } finally {
       setIsLoading(false);

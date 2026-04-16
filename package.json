@@ -20,6 +20,7 @@
     "@fullcalendar/timegrid": "^6.1.20",
     "@types/react-signature-canvas": "^1.0.7",
     "@types/zxcvbn": "^4.4.5",
+    "@vercel/node": "^5.7.7",
     "axios": "^1.6.7",
     "bcryptjs": "^3.0.3",
     "cookie": "^1.1.1",
