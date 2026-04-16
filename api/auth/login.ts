@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import clientPromise from '../lib/mongodb';
+import clientPromise from '../lib/mongodb.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -55,6 +55,10 @@ export default async function handler(
     });
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ message: 'Internal server error' });
+    return response.status(500).json({ 
+      message: 'Internal server error', 
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined 
+    });
   }
 }

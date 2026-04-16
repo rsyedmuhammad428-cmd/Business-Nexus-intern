@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import clientPromise from '../lib/mongodb';
+import clientPromise from '../lib/mongodb.js';
 import bcrypt from 'bcryptjs';
 
 export default async function handler(

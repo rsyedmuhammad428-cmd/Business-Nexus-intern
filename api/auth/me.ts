@@ -1,6 +1,4 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import clientPromise from '../lib/mongodb';
-import { ObjectId } from 'mongodb';
+import clientPromise from '../lib/mongodb.js';import { ObjectId } from 'mongodb';
 import jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
