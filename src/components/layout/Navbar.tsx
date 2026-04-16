@@ -121,11 +121,20 @@ export const Navbar: React.FC = () => {
                     className="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-2 py-1.5 pr-6 text-[10px] xl:text-[11px] font-semibold text-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/10 outline-none transition-all cursor-pointer w-[110px] xl:w-[150px] truncate shadow-sm"
                   >
                     <option value="" disabled>Switch...</option>
-                    <optgroup label="All users">
-                      {users.map((u) => (
-                        <option key={u.id} value={u.id}>{u.name}</option>
-                      ))}
-                    </optgroup>
+                    {user?.role === 'entrepreneur' && (
+                      <optgroup label="Entrepreneurs">
+                        {users.filter(u => u.role === 'entrepreneur').map(u => (
+                          <option key={u.id} value={u.id}>{u.name}</option>
+                        ))}
+                      </optgroup>
+                    )}
+                    {user?.role === 'investor' && (
+                      <optgroup label="Investors">
+                        {users.filter(u => u.role === 'investor').map(u => (
+                          <option key={u.id} value={u.id}>{u.name}</option>
+                        ))}
+                      </optgroup>
+                    )}
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1 text-gray-400">
                     <svg className="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -220,11 +229,20 @@ export const Navbar: React.FC = () => {
                       className="appearance-none w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 pr-8 text-sm font-medium text-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/10 outline-none transition-all cursor-pointer shadow-sm"
                     >
                       <option value="" disabled>Switch Account...</option>
-                      <optgroup label="All users">
-                        {users.map((u) => (
-                          <option key={u.id} value={u.id}>{u.name}</option>
-                        ))}
-                      </optgroup>
+                      {user?.role === 'entrepreneur' && (
+                        <optgroup label="Entrepreneurs">
+                          {users.filter(u => u.role === 'entrepreneur').map(u => (
+                            <option key={u.id} value={u.id}>{u.name}</option>
+                          ))}
+                        </optgroup>
+                      )}
+                      {user?.role === 'investor' && (
+                        <optgroup label="Investors">
+                          {users.filter(u => u.role === 'investor').map(u => (
+                            <option key={u.id} value={u.id}>{u.name}</option>
+                          ))}
+                        </optgroup>
+                      )}
                     </select>
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
                       <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
