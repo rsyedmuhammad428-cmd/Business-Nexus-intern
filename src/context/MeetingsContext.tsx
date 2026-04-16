@@ -109,7 +109,6 @@ export const MeetingsProvider: React.FC<{ children: React.ReactNode; currentUser
   const [availabilitySlots, setAvailabilitySlots] = useState<AvailabilitySlot[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const [lastUserId, setLastUserId] = useState<string | null>(null);
 
   useEffect(() => {
     const s = loadState();
@@ -130,19 +129,6 @@ export const MeetingsProvider: React.FC<{ children: React.ReactNode; currentUser
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
-
-  // Clear meetings when user changes (account switch)
-  useEffect(() => {
-    if (currentUser?.id && lastUserId && lastUserId !== currentUser.id) {
-      // User has switched, clear demo data
-      setAvailabilitySlots([]);
-      setMeetings([]);
-      localStorage.removeItem(STORAGE_KEY_V2);
-    }
-    if (currentUser?.id) {
-      setLastUserId(currentUser.id);
-    }
-  }, [currentUser?.id, lastUserId]);
 
   useEffect(() => {
     if (!hydrated) return;

@@ -21,7 +21,12 @@ export const PaymentsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Mock initial data
       const initialWallets: Record<string, Wallet> = {
         'e1': { userId: 'e1', balance: 5000 },
+        'e2': { userId: 'e2', balance: 0 },
+        'e3': { userId: 'e3', balance: 0 },
+        'e4': { userId: 'e4', balance: 0 },
         'i1': { userId: 'i1', balance: 150000 },
+        'i2': { userId: 'i2', balance: 0 },
+        'i3': { userId: 'i3', balance: 0 },
       };
       const initialTransactions: Transaction[] = [
         {
