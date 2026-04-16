@@ -48,9 +48,7 @@ function AppRoutes() {
     <MeetingsProvider currentUser={user}>
       <DocumentsProvider>
         <PaymentsProvider>
-            <Router>
-              <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-              <Routes>
+          <Routes>
                 {/* Authentication Routes */}
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
@@ -124,7 +122,6 @@ function AppRoutes() {
                 {/* Catch all other routes and redirect to login */}
                 <Route path="*" element={<Navigate to="/login" replace />} />
               </Routes>
-            </Router>
         </PaymentsProvider>
       </DocumentsProvider>
     </MeetingsProvider>
