@@ -24,10 +24,25 @@ export default async function handler(
     const db = client.db();
     const usersCollection = db.collection('users');
 
-    // AUTO-SEED: If database is empty, seed it automatically
-    const count = await usersCollection.countDocuments();
-    if (count === 0) {
-      console.log('Database empty, performing auto-seed...');
+    // AUTO-SEED: Always ensure demo users exist with correct IDs
+    const demoEmails = [
+      'sarah@techwave.io',
+      'david@greenlife.co',
+      'maya@healthpulse.com',
+      'james@urbanfarm.io',
+      'michael@vcinnovate.com',
+      'jennifer@impactvc.org',
+      'robert@healthventures.com'
+    ];
+
+    // Check if any demo users exist
+    const existingDemoUsers = await usersCollection.countDocuments({
+      email: { $in: demoEmails }
+    });
+
+    // If demo users don't exist or collection has wrong data, clear and reseed
+    if (existingDemoUsers === 0) {
+      console.log('Seeding demo users...');
       const demoUsers = [
         {
           _id: 'e1',
@@ -149,9 +164,14 @@ export default async function handler(
 
       for (const demoUser of demoUsers) {
         const hashedPassword = await bcrypt.hash('password123', 12);
-        await usersCollection.insertOne({ ...demoUser, password: hashedPassword });
+        try {
+          await usersCollection.insertOne({ ...demoUser, password: hashedPassword });
+        } catch (err: any) {
+          // Ignore duplicate key errors
+          if (err.code !== 11000) throw err;
+        }
       }
-      console.log('Auto-seed completed.');
+      console.log('Seed completed.');
     }
 
     // Find user
