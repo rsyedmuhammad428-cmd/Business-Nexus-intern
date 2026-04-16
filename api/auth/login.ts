@@ -30,6 +30,7 @@ export default async function handler(
       console.log('Database empty, performing auto-seed...');
       const demoUsers = [
         {
+          _id: 'e1',
           name: 'Sarah Johnson',
           email: 'sarah@techwave.io',
           role: 'entrepreneur',
@@ -46,6 +47,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'e2',
           name: 'David Chen',
           email: 'david@greenlife.co',
           role: 'entrepreneur',
@@ -62,6 +64,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'e3',
           name: 'Maya Patel',
           email: 'maya@healthpulse.com',
           role: 'entrepreneur',
@@ -78,6 +81,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'e4',
           name: 'James Wilson',
           email: 'james@urbanfarm.io',
           role: 'entrepreneur',
@@ -94,6 +98,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'i1',
           name: 'Michael Rodriguez',
           email: 'michael@vcinnovate.com',
           role: 'investor',
@@ -109,6 +114,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'i2',
           name: 'Jennifer Lee',
           email: 'jennifer@impactvc.org',
           role: 'investor',
@@ -124,6 +130,7 @@ export default async function handler(
           createdAt: new Date().toISOString()
         },
         {
+          _id: 'i3',
           name: 'Robert Torres',
           email: 'robert@healthventures.com',
           role: 'investor',
