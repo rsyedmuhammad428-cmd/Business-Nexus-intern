@@ -14,8 +14,11 @@ export default async function handler(
     const { name, email, password, role } = request.body;
 
     if (!name || !email || !password || !role) {
-      return response.status(400).json({ message: 'Missing required fields' });
-    }
+      return response.status(401).json({ 
+      message: 'Invalid or expired token',
+      error: 'Missing required fields' 
+    });
+  }
 
     const client = await clientPromise;
     const db = client.db();
@@ -55,6 +58,9 @@ export default async function handler(
     });
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ message: 'Internal server error' });
+    return response.status(500).json({ 
+      message: 'Internal server error', 
+      error: error.message 
+    });
   }
 }
