@@ -24,7 +24,7 @@ export default async function handler(
     const db = client.db();
     const usersCollection = db.collection('users');
 
-    // AUTO-SEED: Always ensure demo users exist with correct IDs
+    // AUTO-SEED: Ensure demo users exist with correct string IDs
     const demoEmails = [
       'sarah@techwave.io',
       'david@greenlife.co',
@@ -35,14 +35,19 @@ export default async function handler(
       'robert@healthventures.com'
     ];
 
-    // Check if any demo users exist
-    const existingDemoUsers = await usersCollection.countDocuments({
-      email: { $in: demoEmails }
+    // Check if we have valid demo users (with string _id)
+    const validDemoUsers = await usersCollection.countDocuments({
+      email: { $in: demoEmails },
+      _id: { $type: 'string' }  // Only count if _id is string type
     });
 
-    // If demo users don't exist or collection has wrong data, clear and reseed
-    if (existingDemoUsers === 0) {
-      console.log('Seeding demo users...');
+    // If we don't have all 7 valid demo users, clean up and reseed
+    if (validDemoUsers < 7) {
+      console.log(`Found ${validDemoUsers} valid demo users, reseeding...`);
+      
+      // Delete any existing demo users (regardless of ID format)
+      await usersCollection.deleteMany({ email: { $in: demoEmails } });
+      
       const demoUsers = [
         {
           _id: 'e1',
@@ -164,14 +169,9 @@ export default async function handler(
 
       for (const demoUser of demoUsers) {
         const hashedPassword = await bcrypt.hash('password123', 12);
-        try {
-          await usersCollection.insertOne({ ...demoUser, password: hashedPassword });
-        } catch (err: any) {
-          // Ignore duplicate key errors
-          if (err.code !== 11000) throw err;
-        }
+        await usersCollection.insertOne({ ...demoUser, password: hashedPassword });
       }
-      console.log('Seed completed.');
+      console.log('Reseed completed with 7 demo users.');
     }
 
     // Find user
