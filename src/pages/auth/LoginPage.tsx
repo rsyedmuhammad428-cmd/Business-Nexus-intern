@@ -20,59 +20,20 @@ export const LoginPage: React.FC = () => {
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
-    
-    try {
-      // Simulate validating credentials first
-      await new Promise(resolve => setTimeout(resolve, 800));
-      // Just step to OTP
-      setStep(2);
-    } catch (err) {
-      setError((err as Error).message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleOtpChange = (index: number, value: string) => {
-    if (value.length > 1) return; // limit to 1 char
-    
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    // Auto-focus next input
-    if (value && index < 3) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      nextInput?.focus();
-    }
-  };
-
-  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      const prevInput = document.getElementById(`otp-${index - 1}`);
-      prevInput?.focus();
-    }
-  };
-
-  const handleOtpSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const otpValue = otp.join('');
-    if (otpValue.length < 4) {
-      setError('Please enter a valid 4-digit code');
+    if (!email || !password) {
+      setError('Please enter both email and password');
       return;
     }
 
     setError(null);
     setIsLoading(true);
+    
     try {
       await login(email, password, role);
       // Redirect based on user role
       navigate(role === 'entrepreneur' ? '/dashboard/entrepreneur' : '/dashboard/investor');
-    } catch (err) {
-      setError((err as Error).message);
-      setStep(1); // revert on failure
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -174,183 +135,128 @@ export const LoginPage: React.FC = () => {
               </div>
             )}
 
-            {step === 1 ? (
-              <>
-                <form className="space-y-5" onSubmit={handleSubmit}>
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                       I am a
-                    </label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <button
-                        type="button"
-                        className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
-                          role === 'entrepreneur'
-                            ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
-                            : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
-                        }`}
-                        onClick={() => setRole('entrepreneur')}
-                      >
-                        <Building2 size={24} className="mb-1" />
-                        <span className="text-xs font-bold uppercase tracking-tight">Entrepreneur</span>
-                      </button>
-                      
-                      <button
-                        type="button"
-                        className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
-                          role === 'investor'
-                            ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
-                            : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
-                        }`}
-                        onClick={() => setRole('investor')}
-                      >
-                        <CircleDollarSign size={24} className="mb-1" />
-                        <span className="text-xs font-bold uppercase tracking-tight">Investor</span>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <Input
-                      label="EMAIL ADDRESS"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      fullWidth
-                      startAdornment={<User size={18} className="text-gray-400" />}
-                      className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
-                    />
-                    
-                    <div className="relative">
-                      <Input
-                        label="PASSWORD"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        fullWidth
-                        startAdornment={<LogIn size={18} className="text-gray-400" />}
-                        className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
-                      />
-                      <div className="flex justify-end mt-1">
-                         <a href="#" className="text-xs font-semibold text-primary-600 hover:text-primary-500">
-                          Forgot password?
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded-md"
-                    />
-                    <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
-                      Keep me signed in
-                    </label>
-                  </div>
-                  
-                  <Button
-                    type="submit"
-                    fullWidth
-                    isLoading={isLoading}
-                    className="py-4 text-sm font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-primary-600/20 active:scale-[0.98] transition-transform"
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              <div>
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                   I am a
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
+                      role === 'entrepreneur'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
+                        : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setRole('entrepreneur')}
                   >
-                    Continue to Dashboard
-                  </Button>
-                </form>
-                
-                <div className="mt-10">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-100"></div>
-                    </div>
-                    <div className="relative flex justify-center text-xs">
-                      <span className="px-3 bg-white text-gray-400 font-semibold uppercase tracking-widest">Demo Accounts</span>
-                    </div>
-                  </div>
+                    <Building2 size={24} className="mb-1" />
+                    <span className="text-xs font-bold uppercase tracking-tight">Entrepreneur</span>
+                  </button>
                   
-                  <div className="mt-6 grid grid-cols-2 gap-4">
-                    <button
-                      onClick={() => fillDemoCredentials('entrepreneur')}
-                      className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      Entrepreneur
-                    </button>
-                    
-                    <button
-                      onClick={() => fillDemoCredentials('investor')}
-                      className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      Investor
-                    </button>
-                  </div>
+                  <button
+                    type="button"
+                    className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
+                      role === 'investor'
+                        ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
+                        : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
+                    }`}
+                    onClick={() => setRole('investor')}
+                  >
+                    <CircleDollarSign size={24} className="mb-1" />
+                    <span className="text-xs font-bold uppercase tracking-tight">Investor</span>
+                  </button>
                 </div>
-                
-                <div className="mt-8 pt-6 border-t border-gray-50 text-center">
-                  <p className="text-sm text-gray-600">
-                    New to the platform?{' '}
-                    <Link to="/register" className="font-bold text-primary-600 hover:text-primary-500 decoration-2 underline-offset-4 hover:underline">
-                      Create an account
-                    </Link>
-                  </p>
-                </div>
-              </>
-            ) : (
-              <div className="space-y-8 py-4 animate-fade-in-up">
-                <div className="text-center">
-                  <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-2xl bg-primary-100 text-primary-600 shadow-inner mb-6">
-                    <KeyRound size={32} />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Security Verification</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    A unique 4-digit code was sent to <br />
-                    <span className="font-bold text-gray-900">{email}</span>
-                  </p>
-                </div>
-
-                <form onSubmit={handleOtpSubmit} className="space-y-8">
-                  <div className="flex justify-center gap-4">
-                    {otp.map((digit, index) => (
-                      <input
-                        key={index}
-                        id={`otp-${index}`}
-                        type="text"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(index, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                        className="w-16 h-18 text-center text-3xl font-bold bg-white border-2 border-gray-100 rounded-2xl focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 transition-all shadow-sm"
-                        required
-                        autoFocus={index === 0}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="space-y-4">
-                    <Button
-                      type="submit"
-                      fullWidth
-                      isLoading={isLoading}
-                      className="py-4 text-sm font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-primary-600/20 active:scale-[0.98] transition-transform"
-                    >
-                      Verify and Login
-                    </Button>
-                    
-                    <button
-                      type="button"
-                      onClick={() => setStep(1)}
-                      className="w-full text-center text-xs font-bold text-gray-400 hover:text-gray-600 transition-colors uppercase tracking-widest"
-                    >
-                      Back to sign in
-                    </button>
-                  </div>
-                </form>
               </div>
-            )}
+              
+              <div className="space-y-4">
+                <Input
+                  label="EMAIL ADDRESS"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  fullWidth
+                  startAdornment={<User size={18} className="text-gray-400" />}
+                  className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
+                />
+                
+                <div className="relative">
+                  <Input
+                    label="PASSWORD"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    fullWidth
+                    startAdornment={<LogIn size={18} className="text-gray-400" />}
+                    className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
+                  />
+                  <div className="flex justify-end mt-1">
+                     <a href="#" className="text-xs font-semibold text-primary-600 hover:text-primary-500">
+                      Forgot password?
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded-md"
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">
+                  Keep me signed in
+                </label>
+              </div>
+              
+              <Button
+                type="submit"
+                fullWidth
+                isLoading={isLoading}
+                className="py-4 text-sm font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-primary-600/20 active:scale-[0.98] transition-transform"
+              >
+                Continue to Dashboard
+              </Button>
+            </form>
+            
+            <div className="mt-10">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-100"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="px-3 bg-white text-gray-400 font-semibold uppercase tracking-widest">Demo Accounts</span>
+                </div>
+              </div>
+              
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => fillDemoCredentials('entrepreneur')}
+                  className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  Entrepreneur
+                </button>
+                
+                <button
+                  onClick={() => fillDemoCredentials('investor')}
+                  className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  Investor
+                </button>
+              </div>
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-gray-50 text-center">
+              <p className="text-sm text-gray-600">
+                New to the platform?{' '}
+                <Link to="/register" className="font-bold text-primary-600 hover:text-primary-500 decoration-2 underline-offset-4 hover:underline">
+                  Create an account
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
