@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply min-h-screen bg-slate-50 font-sans text-base text-slate-900;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-semibold tracking-tight text-slate-900;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+
+* {
+  @apply transition-all duration-200;
+}
+
+.no-transition {
+  @apply transition-none !important;
+}
+
+/* FullCalendar — align toolbar and primary actions with Nexus / Tailwind tokens */
+.fc-theme-nexus .fc .fc-button-primary {
+  @apply border-primary-600 bg-primary-600 text-white shadow-sm hover:border-primary-700 hover:bg-primary-700;
+}
+
+.fc-theme-nexus .fc .fc-button-primary:not(:disabled):active,
+.fc-theme-nexus .fc .fc-button-primary:not(:disabled).fc-button-active {
+  @apply border-primary-800 bg-primary-800;
+}
+
+.fc-theme-nexus .fc .fc-toolbar-title {
+  @apply text-lg font-semibold text-slate-900;
+}
+
+.fc-theme-nexus .fc .fc-col-header-cell-cushion,
+.fc-theme-nexus .fc .fc-daygrid-day-number {
+  @apply text-slate-700;
+}
+
+.fc-theme-nexus .fc .fc-timegrid-slot-label {
+  @apply text-xs text-slate-500;
+}
+

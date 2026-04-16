@@ -1,0 +1,52 @@
+Nexus – Investor & Entrepreneur Collaboration Platform
+
+Project Overview:
+- Frontend-only SaaS-style collaboration platform built with React, Vite, TypeScript, Tailwind CSS, and React Router.
+- Targets two user roles: investor and entrepreneur.
+- Simulates backend behavior using React context and localStorage.
+
+Core Modules:
+- Authentication
+  - Login with role selection (investor or entrepreneur)
+  - Mock 2FA/OTP flow in LoginPage
+  - Registration with password strength meter using zxcvbn
+  - Role-based protected routes using ProtectedRoute
+- Dashboard
+  - Investor dashboard with wallet balance card, startup discovery, filters, and metrics
+  - Entrepreneur dashboard with profile summary, requests, meetings, and wallet balance card
+- Meetings
+  - Meeting request flow and calendar support already implemented in Week 1
+- Video Call
+  - Video call page available in Week 2 implementation
+- Document Chamber
+  - Document upload and management pages implemented in Week 2
+- Payments
+  - Wallet system with separate balances per user
+  - Deposit/withdraw actions
+  - Transaction history table with mock status and timestamps
+  - Investor-to-entrepreneur transfer flow via TransferModal and PaymentsPage
+- Guided Walkthrough
+  - React Joyride-based app tour integrated in DashboardLayout
+
+Key Files:
+- src/App.tsx - app routing and provider composition
+- src/context/AuthContext.tsx - auth state, login/register, localStorage persistence
+- src/context/PaymentsContext.tsx - wallet and transaction state management
+- src/pages/auth/LoginPage.tsx - login + OTP UI
+- src/pages/auth/RegisterPage.tsx - password strength meter
+- src/pages/payments/PaymentsPage.tsx - payments dashboard and transfer workflow
+- src/components/payments/TransactionTable.tsx - transaction history UI
+- src/components/payments/TransferModal.tsx - mock fund transfer modal
+- src/components/walkthrough/GuidedWalkthrough.tsx - onboarding tour using React Joyride
+- src/components/auth/ProtectedRoute.tsx - route protection and role enforcement
+
+Recent Fixes:
+- Fixed React Joyride import in GuidedWalkthrough.tsx to match package API.
+- Improved wallet card contrast on investor and entrepreneur dashboards for visibility.
+- Confirmed `npm run build` passes successfully after the fixes.
+
+Development Notes:
+- The project is a frontend mockup; no real backend integration is required.
+- State is persisted using localStorage for wallets and auth session.
+- UI/UX focuses on scalable SaaS dashboard patterns.
+- Future refinement can include route redirects for authenticated users, performance chunking, and additional mobile polish.
