@@ -1,7 +1,7 @@
 # 🚀 Business Nexus — Investor & Entrepreneur Collaboration Platform
 
 Business Nexus is a full-stack-ready React web application that bridges the gap between entrepreneurs and investors. It provides a professional workspace for collaboration requests, meetings, document sharing, real-time messaging, payments, and more.
-
+https://business-nexus-intern-git-main-rsyedmuhammad428-cmds-projects.vercel.app/dashboard/entrepreneur
 ---
 
 ## 📋 Table of Contents

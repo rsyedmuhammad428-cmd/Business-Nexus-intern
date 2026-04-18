@@ -109,23 +109,25 @@ export const LoginPage: React.FC = () => {
       </div>
 
       {/* Right side: Login Form */}
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 bg-gray-50 lg:bg-white overflow-y-auto">
-        <div className="mx-auto w-full max-w-sm lg:w-96">
-          <div className="lg:hidden flex justify-center mb-8">
-             <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
+      <div className="flex-1 flex flex-col justify-center py-12 px-6 sm:px-12 lg:px-20 xl:px-24 bg-gray-50 lg:bg-white overflow-y-auto">
+        <div className="mx-auto w-full max-w-md lg:max-w-sm">
+          <div className="lg:hidden flex justify-center mb-10">
+             <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center shadow-xl shadow-primary-600/20 rotate-3 hover:rotate-0 transition-transform duration-300">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
                   <path d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M16 21V5C16 3.89543 15.1046 3 14 3H10C8.89543 3 8 3.89543 8 5V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
           </div>
           
-          <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-            Account Login
-          </h2>
-          <p className="mt-3 text-sm text-gray-600 mb-8">
-            Please enter your credentials to access your dashboard.
-          </p>
+          <div className="text-center lg:text-left">
+            <h2 className="text-4xl lg:text-3xl font-extrabold text-gray-900 tracking-tight">
+              Account Login
+            </h2>
+            <p className="mt-4 text-base lg:text-sm text-gray-600 mb-10">
+              Please enter your credentials to access your dashboard.
+            </p>
+          </div>
 
           <div className="mt-8 transition-all duration-300">
             {error && (
@@ -137,63 +139,75 @@ export const LoginPage: React.FC = () => {
 
             <form className="space-y-5" onSubmit={handleSubmit}>
               <div>
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 ml-1">
                    I am a
                 </label>
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     type="button"
-                    className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
+                    className={`group py-4 px-4 border-2 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden ${
                       role === 'entrepreneur'
-                        ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
-                        : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
+                        ? 'border-primary-500 bg-white ring-4 ring-primary-50 shadow-md'
+                        : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200 hover:text-gray-600'
                     }`}
                     onClick={() => setRole('entrepreneur')}
                   >
-                    <Building2 size={24} className="mb-1" />
-                    <span className="text-xs font-bold uppercase tracking-tight">Entrepreneur</span>
+                    {role === 'entrepreneur' && (
+                      <div className="absolute top-0 right-0 p-1.5">
+                        <div className="w-2 h-2 rounded-full bg-primary-500"></div>
+                      </div>
+                    )}
+                    <Building2 size={28} className={`mb-2 transition-colors ${role === 'entrepreneur' ? 'text-primary-600' : 'text-gray-300 group-hover:text-gray-400'}`} />
+                    <span className={`text-xs font-bold uppercase tracking-widest ${role === 'entrepreneur' ? 'text-primary-900' : ''}`}>Entrepreneur</span>
                   </button>
                   
                   <button
                     type="button"
-                    className={`py-3 px-4 border-2 rounded-xl flex flex-col items-center justify-center transition-all duration-200 ${
+                    className={`group py-4 px-4 border-2 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden ${
                       role === 'investor'
-                        ? 'border-primary-500 bg-primary-50 text-primary-700 ring-4 ring-primary-50'
-                        : 'border-gray-100 text-gray-500 hover:border-gray-200 hover:bg-gray-50'
+                        ? 'border-primary-500 bg-white ring-4 ring-primary-50 shadow-md'
+                        : 'border-gray-100 bg-white text-gray-400 hover:border-gray-200 hover:text-gray-600'
                     }`}
                     onClick={() => setRole('investor')}
                   >
-                    <CircleDollarSign size={24} className="mb-1" />
-                    <span className="text-xs font-bold uppercase tracking-tight">Investor</span>
+                    {role === 'investor' && (
+                      <div className="absolute top-0 right-0 p-1.5">
+                        <div className="w-2 h-2 rounded-full bg-primary-500"></div>
+                      </div>
+                    )}
+                    <CircleDollarSign size={28} className={`mb-2 transition-colors ${role === 'investor' ? 'text-primary-600' : 'text-gray-300 group-hover:text-gray-400'}`} />
+                    <span className={`text-xs font-bold uppercase tracking-widest ${role === 'investor' ? 'text-primary-900' : ''}`}>Investor</span>
                   </button>
                 </div>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <Input
-                  label="EMAIL ADDRESS"
+                  label="Email Address"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@company.com"
                   required
                   fullWidth
-                  startAdornment={<User size={18} className="text-gray-400" />}
-                  className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
+                  startAdornment={<User size={18} />}
+                  className="group"
                 />
                 
                 <div className="relative">
                   <Input
-                    label="PASSWORD"
+                    label="Password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
                     required
                     fullWidth
-                    startAdornment={<LogIn size={18} className="text-gray-400" />}
-                    className="rounded-xl border-gray-200 focus:border-primary-500 focus:ring-primary-500"
+                    startAdornment={<LogIn size={18} />}
+                    className="group"
                   />
-                  <div className="flex justify-end mt-1">
-                     <a href="#" className="text-xs font-semibold text-primary-600 hover:text-primary-500">
+                  <div className="flex justify-end mt-2">
+                     <a href="#" className="text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors uppercase tracking-wider">
                       Forgot password?
                     </a>
                   </div>
@@ -216,7 +230,7 @@ export const LoginPage: React.FC = () => {
                 type="submit"
                 fullWidth
                 isLoading={isLoading}
-                className="py-4 text-sm font-bold uppercase tracking-wider rounded-xl shadow-lg shadow-primary-600/20 active:scale-[0.98] transition-transform"
+                className="py-4.5 text-sm font-bold uppercase tracking-widest rounded-2xl shadow-xl shadow-primary-600/25 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 active:scale-[0.98] transition-all duration-300 border-none"
               >
                 Continue to Dashboard
               </Button>
