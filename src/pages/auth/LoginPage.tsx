@@ -249,14 +249,14 @@ export const LoginPage: React.FC = () => {
               <div className="mt-6 grid grid-cols-2 gap-4">
                 <button
                   onClick={() => fillDemoCredentials('entrepreneur')}
-                  className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3.5 text-xs font-bold text-white bg-primary-600 rounded-xl shadow-lg shadow-primary-600/20 hover:bg-primary-700 active:scale-[0.98] transition-all duration-200 uppercase tracking-widest"
                 >
                   Entrepreneur
                 </button>
                 
                 <button
                   onClick={() => fillDemoCredentials('investor')}
-                  className="flex items-center justify-center px-4 py-2 text-xs font-bold text-gray-600 bg-gray-50 border border-transparent rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center px-4 py-3.5 text-xs font-bold text-white bg-primary-600 rounded-xl shadow-lg shadow-primary-600/20 hover:bg-primary-700 active:scale-[0.98] transition-all duration-200 uppercase tracking-widest"
                 >
                   Investor
                 </button>
